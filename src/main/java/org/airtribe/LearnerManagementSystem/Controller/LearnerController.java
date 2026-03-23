@@ -1,8 +1,10 @@
 package org.airtribe.LearnerManagementSystem.Controller;
 
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
+import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
 import org.airtribe.LearnerManagementSystem.Service.LearnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class LearnerController {
 //    }
 
     @GetMapping("learners/{id}")
-    public Learner learner(@PathVariable String id) {
+    public Learner learner(@PathVariable Long id) throws LearnerNotFoundException {
         return  learnerService.findLearnerById(id);
     }
 
@@ -36,4 +38,8 @@ public class LearnerController {
         return learnerService.findLearnerByName(name);
     }
 
+    @ExceptionHandler(LearnerNotFoundException.class)
+    public ResponseEntity<String> handleLearnerNotFoundException(LearnerNotFoundException e) {
+        return ResponseEntity.status(404).body(e.getMessage());
+    }
 }

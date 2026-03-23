@@ -1,12 +1,10 @@
 package org.airtribe.LearnerManagementSystem.Service;
 
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
+import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
 import org.airtribe.LearnerManagementSystem.Repository.LearnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -24,8 +22,11 @@ public class LearnerService {
         return  learnerRepository.findAll();
     }
 
-    public Learner findLearnerById(String id) {
-        return learnerRepository.findById(id).get();
+    public Learner findLearnerById(Long id) throws LearnerNotFoundException {
+        if(learnerRepository.findById(id).isPresent()) {
+            return learnerRepository.findById(id).get();
+        }
+        throw new LearnerNotFoundException("Learner with id " + id + " not found");
     }
 
     public List<Learner> findLearnerByName(String name) {

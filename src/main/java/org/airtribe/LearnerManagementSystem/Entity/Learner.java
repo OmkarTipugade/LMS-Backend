@@ -9,13 +9,13 @@ import jakarta.persistence.Id;
 public class Learner {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  String id;
+    private  Long id;
     private  String name;
     private  String email;
     private  int age;
 
 
-    public Learner(String id, String name, String email, int age) {
+    public Learner(Long id, String name, String email, int age) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -24,11 +24,11 @@ public class Learner {
 
     public Learner() {}
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
