@@ -1,6 +1,7 @@
 package org.airtribe.LearnerManagementSystem.Service;
 
 import org.airtribe.LearnerManagementSystem.Entity.Cohort;
+import org.airtribe.LearnerManagementSystem.Entity.CohortDTO;
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
 import org.airtribe.LearnerManagementSystem.Exception.CohortNotFoundException;
 import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
@@ -9,7 +10,9 @@ import org.airtribe.LearnerManagementSystem.Repository.LearnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CohortService {
@@ -22,6 +25,18 @@ public class CohortService {
         public Cohort createCohort(Cohort cohort) {
             return cohortRepository.save(cohort);
         }
+
+    public static CohortDTO convertToCohortDTO(Cohort cohort) {
+            CohortDTO cohortDTO = new CohortDTO();
+            cohortDTO.setId(cohort.getId());
+            cohortDTO.setName(cohort.getName());
+            cohortDTO.setDescription(cohort.getDescription());
+            return cohortDTO;
+    }
+
+    public static List<CohortDTO> convertToCohortDTO(List<Cohort> cohorts) {
+            return cohorts.stream().map(CohortService::convertToCohortDTO).collect(Collectors.toList());
+    }
 
     public Cohort assignLearnerToCohort(Long cohortId, Long learnerId) throws LearnerNotFoundException, CohortNotFoundException {
             Optional<Learner> LearnerOptional = learnerRepository.findById(learnerId);
@@ -40,5 +55,9 @@ public class CohortService {
             cohort.getLearners().add(learner);
             return cohortRepository.save(cohort);
 
+    }
+
+    public List<Cohort> fetchAllCohorts() {
+            return cohortRepository.findAll();
     }
 }

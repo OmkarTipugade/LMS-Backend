@@ -1,6 +1,7 @@
 package org.airtribe.LearnerManagementSystem.Controller;
 
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
+import org.airtribe.LearnerManagementSystem.Entity.LearnerDTO;
 import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
 import org.airtribe.LearnerManagementSystem.Service.LearnerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class LearnerController {
     private LearnerService learnerService;
 
     @PostMapping("/learners")
-    public Learner learner(@RequestBody Learner learner) {
-        return learnerService.createLearner(learner);
+    public LearnerDTO learner(@RequestBody Learner learner) {
+        return LearnerService.convertToLearnerDTO(learnerService.createLearner(learner));
     }
 
 //    @GetMapping("/learners")
@@ -26,16 +27,19 @@ public class LearnerController {
 //    }
 
     @GetMapping("learners/{id}")
-    public Learner learner(@PathVariable Long id) throws LearnerNotFoundException {
-        return  learnerService.findLearnerById(id);
+    public LearnerDTO learner(@PathVariable Long id) throws LearnerNotFoundException {
+        return LearnerService.convertToLearnerDTO(learnerService.findLearnerById(id));
     }
 
     @GetMapping("/learners")
-    public List<Learner> learners(@RequestParam(value = "name", required = false) String name) {
+    public List<LearnerDTO> learners(@RequestParam(value = "name", required = false) String name) {
+        List<Learner> learners;
         if (name == null) {
-            return learnerService.findAllLearners();
+            learners = learnerService.findAllLearners();
+        } else {
+            learners = learnerService.findLearnerByName(name);
         }
-        return learnerService.findLearnerByName(name);
+        return LearnerService.convertToLearnerDTO(learners);
     }
 
     @ExceptionHandler(LearnerNotFoundException.class)

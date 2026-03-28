@@ -1,23 +1,17 @@
 package org.airtribe.LearnerManagementSystem.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.util.List;
 
-@Entity
-public class Learner {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private  Long id;
-    private  String name;
-    private  String email;
-    private  int age;
-    @ManyToMany(mappedBy = "learners")
-    @JsonIgnore
-    private List<Cohort> cohorts;
+public class LearnerDTO {
+    private Long id;
+    private String name;
+    private String email;
+    private int age;
 
-    public Learner(Long id, String name, String email, int age, List<Cohort> cohorts) {
+    private List<CohortDTO> cohorts;
+
+
+    public LearnerDTO(Long id, String name, String email, int age, List<CohortDTO> cohorts) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -25,7 +19,7 @@ public class Learner {
         this.cohorts = cohorts;
     }
 
-    public Learner() {}
+    public LearnerDTO() {}
 
     public Long getId() {
         return id;
@@ -58,10 +52,12 @@ public class Learner {
     public void setAge(int age) {
         this.age = age;
     }
-    public List<Cohort> getCohorts() {
+
+    public List<CohortDTO> getCohorts() {
         return cohorts;
     }
-    public void setCohorts(List<Cohort> cohorts) {
+
+    public void setCohorts(List<CohortDTO> cohorts) {
         this.cohorts = cohorts;
     }
 }

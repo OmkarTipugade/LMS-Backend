@@ -1,9 +1,6 @@
 package org.airtribe.LearnerManagementSystem.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -16,6 +13,9 @@ public class Cohort {
     private String description;
     @ManyToMany
     private List<Learner> learners;
+
+    @ManyToOne
+    private Course course;
 
     public Cohort() {
     }
