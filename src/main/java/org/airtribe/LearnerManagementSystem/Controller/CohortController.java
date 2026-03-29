@@ -1,44 +1,65 @@
 package org.airtribe.LearnerManagementSystem.Controller;
 
 import org.airtribe.LearnerManagementSystem.Entity.Cohort;
-import org.airtribe.LearnerManagementSystem.Entity.CohortDTO;
-import org.airtribe.LearnerManagementSystem.Exception.CohortNotFoundException;
-import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
+import org.airtribe.LearnerManagementSystem.Mapper.ApiMapper;
 import org.airtribe.LearnerManagementSystem.Service.CohortService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.airtribe.LearnerManagementSystem.dto.CohortCreateRequest;
+import org.airtribe.LearnerManagementSystem.dto.CohortResponse;
+import org.airtribe.LearnerManagementSystem.dto.LearnerCreateRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping({"/api/v1/cohorts", "/cohorts"})
 public class CohortController {
 
-    @Autowired
-    private CohortService cohortService;
+    private final CohortService cohortService;
+    private final ApiMapper apiMapper;
 
-    @PostMapping("/cohorts")
-    public CohortDTO createCohort(@RequestBody Cohort cohort) {
-        return CohortService.convertToCohortDTO(cohortService.createCohort(cohort));
+    public CohortController(CohortService cohortService, ApiMapper apiMapper) {
+        this.cohortService = cohortService;
+        this.apiMapper = apiMapper;
     }
 
+    @PostMapping
+    public ResponseEntity<CohortResponse> createCohort(@Valid @RequestBody CohortCreateRequest request) {
+        Cohort created = cohortService.createCohort(apiMapper.toCohort(request), request.courseId());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(apiMapper.toCohortResponse(created));
+    }
+
+    @GetMapping("/{id}")
+    public CohortResponse getCohort(@PathVariable Long id) {
+        return apiMapper.toCohortResponse(cohortService.fetchCohortById(id));
+    }
+
+    @GetMapping
+    public List<CohortResponse> getCohorts() {
+        return apiMapper.toCohortResponses(cohortService.fetchAllCohorts());
+    }
+
+    @PostMapping("/{cohortId}/learners/{learnerId}")
+    public CohortResponse assignLearnerToCohort(@PathVariable Long cohortId, @PathVariable Long learnerId) {
+        return apiMapper.toCohortResponse(cohortService.assignLearnerToCohort(cohortId, learnerId));
+    }
+
+    @PostMapping("/{cohortId}/learners")
+    public CohortResponse assignAndCreateLearners(@PathVariable Long cohortId, @Valid @RequestBody List<LearnerCreateRequest> learners) {
+        return apiMapper.toCohortResponse(cohortService.assignAndCreateLearners(cohortId, apiMapper.toLearners(learners)));
+    }
+
+    @Deprecated
     @PostMapping("/assignLearnerToCohort")
-    public CohortDTO assignLearnerToCohort(@RequestParam Long cohortId, @RequestParam Long learnerId) throws CohortNotFoundException, LearnerNotFoundException {
-        return CohortService.convertToCohortDTO(cohortService.assignLearnerToCohort(cohortId, learnerId));
-    }
-
-    @GetMapping("/cohorts")
-    public List<CohortDTO> getCohorts() {
-        return CohortService.convertToCohortDTO(cohortService.fetchAllCohorts());
-    }
-
-    @ExceptionHandler(CohortNotFoundException.class)
-    public ResponseEntity<String> handleCohortNotFoundException(CohortNotFoundException e) {
-        return ResponseEntity.status(404).body(e.getMessage());
-    }
-
-    @ExceptionHandler(LearnerNotFoundException.class)
-    public ResponseEntity<String> handleLearnerNotFoundException(LearnerNotFoundException e) {
-        return ResponseEntity.status(404).body(e.getMessage());
+    public CohortResponse assignLearnerToCohortLegacy(@RequestParam Long cohortId, @RequestParam Long learnerId) {
+        return apiMapper.toCohortResponse(cohortService.assignLearnerToCohort(cohortId, learnerId));
     }
 }

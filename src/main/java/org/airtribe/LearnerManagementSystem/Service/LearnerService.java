@@ -4,9 +4,9 @@ import org.airtribe.LearnerManagementSystem.Entity.Cohort;
 import org.airtribe.LearnerManagementSystem.Entity.CohortDTO;
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
 import org.airtribe.LearnerManagementSystem.Entity.LearnerDTO;
+import org.airtribe.LearnerManagementSystem.Exception.DuplicateResourceException;
 import org.airtribe.LearnerManagementSystem.Exception.LearnerNotFoundException;
 import org.airtribe.LearnerManagementSystem.Repository.LearnerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,8 +15,11 @@ import java.util.List;
 @Service
 public class LearnerService {
 
-    @Autowired
-    private LearnerRepository learnerRepository;
+    private final LearnerRepository learnerRepository;
+
+    public LearnerService(LearnerRepository learnerRepository) {
+        this.learnerRepository = learnerRepository;
+    }
 
     public static LearnerDTO convertToLearnerDTO(Learner learner) {
         LearnerDTO learnerDTO = new LearnerDTO();
@@ -47,6 +50,9 @@ public class LearnerService {
     }
 
     public Learner createLearner(Learner learner) {
+        if (learnerRepository.findByEmail(learner.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("Learner with email " + learner.getEmail() + " already exists");
+        }
         return  learnerRepository.save(learner);
     }
 
@@ -54,11 +60,9 @@ public class LearnerService {
         return  learnerRepository.findAll();
     }
 
-    public Learner findLearnerById(Long id) throws LearnerNotFoundException {
-        if(learnerRepository.findById(id).isPresent()) {
-            return learnerRepository.findById(id).get();
-        }
-        throw new LearnerNotFoundException("Learner with id " + id + " not found");
+    public Learner findLearnerById(Long id) {
+        return learnerRepository.findById(id)
+                .orElseThrow(() -> new LearnerNotFoundException("Learner with id " + id + " not found"));
     }
 
     public List<Learner> findLearnerByName(String name) {

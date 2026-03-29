@@ -2,6 +2,7 @@ package org.airtribe.LearnerManagementSystem.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ public class Cohort {
     private String name;
     private String description;
     @ManyToMany
-    private List<Learner> learners;
+    private List<Learner> learners = new ArrayList<>();
 
     @ManyToOne
     private Course course;
@@ -25,7 +26,7 @@ public class Cohort {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.learners = learners;
+        this.learners = learners == null ? new ArrayList<>() : learners;
     }
 
     public Long getId() {
@@ -49,7 +50,7 @@ public class Cohort {
     }
 
     public void setLearners(List<Learner> learners) {
-        this.learners = learners;
+        this.learners = learners == null ? new ArrayList<>() : learners;
     }
 
     public String getDescription() {
@@ -58,5 +59,13 @@ public class Cohort {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

@@ -17,13 +17,13 @@ public class Course {
     private String description;
 
     @OneToMany(mappedBy = "course")
-    private List<Cohort> cohorts;
+    private List<Cohort> cohorts = new ArrayList<>();
 
     public Course(Long id, String name, String description, List<Cohort> cohorts) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.cohorts = cohorts;
+        this.cohorts = cohorts == null ? new ArrayList<>() : cohorts;
     }
 
     public Course() {}
@@ -55,6 +55,6 @@ public class Course {
         return cohorts;
     }
     public void setCohorts(List<Cohort> cohorts) {
-        this.cohorts = cohorts;
+        this.cohorts = cohorts == null ? new ArrayList<>() : cohorts;
     }
 }

@@ -3,6 +3,7 @@ package org.airtribe.LearnerManagementSystem.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,16 +14,17 @@ public class Learner {
     private  String name;
     private  String email;
     private  int age;
+
     @ManyToMany(mappedBy = "learners")
     @JsonIgnore
-    private List<Cohort> cohorts;
+    private List<Cohort> cohorts = new ArrayList<>();
 
     public Learner(Long id, String name, String email, int age, List<Cohort> cohorts) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.age = age;
-        this.cohorts = cohorts;
+        this.cohorts = cohorts == null ? new ArrayList<>() : cohorts;
     }
 
     public Learner() {}
@@ -62,6 +64,6 @@ public class Learner {
         return cohorts;
     }
     public void setCohorts(List<Cohort> cohorts) {
-        this.cohorts = cohorts;
+        this.cohorts = cohorts == null ? new ArrayList<>() : cohorts;
     }
 }
