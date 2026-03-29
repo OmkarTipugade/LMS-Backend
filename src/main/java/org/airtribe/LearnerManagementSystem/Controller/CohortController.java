@@ -6,7 +6,6 @@ import org.airtribe.LearnerManagementSystem.Service.CohortService;
 import org.airtribe.LearnerManagementSystem.dto.CohortCreateRequest;
 import org.airtribe.LearnerManagementSystem.dto.CohortResponse;
 import org.airtribe.LearnerManagementSystem.dto.LearnerCreateRequest;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -53,7 +52,7 @@ public class CohortController {
     }
 
     @PostMapping("/{cohortId}/learners")
-    public CohortResponse assignAndCreateLearners(@PathVariable Long cohortId, @Valid @RequestBody List<LearnerCreateRequest> learners) {
+    public CohortResponse assignAndCreateLearners(@PathVariable Long cohortId, @RequestBody List<LearnerCreateRequest> learners) {
         return apiMapper.toCohortResponse(cohortService.assignAndCreateLearners(cohortId, apiMapper.toLearners(learners)));
     }
 

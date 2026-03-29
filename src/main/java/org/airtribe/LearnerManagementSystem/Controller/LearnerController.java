@@ -5,7 +5,6 @@ import org.airtribe.LearnerManagementSystem.Mapper.ApiMapper;
 import org.airtribe.LearnerManagementSystem.Service.LearnerService;
 import org.airtribe.LearnerManagementSystem.dto.LearnerCreateRequest;
 import org.airtribe.LearnerManagementSystem.dto.LearnerResponse;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
