@@ -1,9 +1,9 @@
 package org.airtribe.LearnerManagementSystem.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import org.airtribe.LearnerManagementSystem.Validation.constraints.Email;
+import org.airtribe.LearnerManagementSystem.Validation.constraints.Max;
+import org.airtribe.LearnerManagementSystem.Validation.constraints.Min;
+import org.airtribe.LearnerManagementSystem.Validation.constraints.NotBlank;
 
 public record LearnerCreateRequest(
         @NotBlank(message = "name is required") String name,

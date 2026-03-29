@@ -1,6 +1,6 @@
 package org.airtribe.LearnerManagementSystem.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import org.airtribe.LearnerManagementSystem.Validation.constraints.NotBlank;
 
 public record CourseCreateRequest(
         @NotBlank(message = "name is required") String name,
