@@ -1,15 +1,12 @@
 package org.airtribe.LearnerManagementSystem.Controller;
 
+import jakarta.validation.Valid;
 import org.airtribe.LearnerManagementSystem.Entity.Learner;
 import org.airtribe.LearnerManagementSystem.Mapper.ApiMapper;
 import org.airtribe.LearnerManagementSystem.Service.LearnerService;
-import org.airtribe.LearnerManagementSystem.dto.LearnerCreateRequest;
 import org.airtribe.LearnerManagementSystem.dto.LearnerResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,14 +22,8 @@ public class LearnerController {
     }
 
     @PostMapping
-    public ResponseEntity<LearnerResponse> createLearner(@Valid @RequestBody LearnerCreateRequest request) {
-        Learner created = learnerService.createLearner(apiMapper.toLearner(request));
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(created.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(apiMapper.toLearnerResponse(created));
+    public Learner createLearner(@Valid @RequestBody Learner learner) {
+        return learnerService.createLearner(learner);
     }
 
     @GetMapping("/{id}")

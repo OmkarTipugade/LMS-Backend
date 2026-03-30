@@ -1,6 +1,8 @@
 package org.airtribe.LearnerManagementSystem.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,9 @@ public class Cohort {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
     private Long id;
+
+    @NotNull
+    @NotEmpty
     private String name;
     private String description;
     @ManyToMany

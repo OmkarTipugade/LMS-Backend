@@ -26,7 +26,7 @@ public class CohortController {
     }
 
     @PostMapping
-    public ResponseEntity<CohortResponse> createCohort(@Valid @RequestBody CohortCreateRequest request) {
+    public ResponseEntity<CohortResponse> createCohort(@RequestBody CohortCreateRequest request) {
         Cohort created = cohortService.createCohort(apiMapper.toCohort(request), request.courseId());
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

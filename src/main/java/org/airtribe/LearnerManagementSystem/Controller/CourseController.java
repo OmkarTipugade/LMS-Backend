@@ -30,7 +30,7 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponse> createCourse(@Valid @RequestBody CourseCreateRequest request) {
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseCreateRequest request) {
         Course created = courseService.createCourse(apiMapper.toCourse(request));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
