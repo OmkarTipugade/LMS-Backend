@@ -5,11 +5,9 @@ Spring Boot backend service for managing learners, courses, and cohorts, includi
 ## Project Information
 
 - **Project name:** Learner Management System
-- **Group:** `org.airtribe`
 - **Language:** Java 21
 - **Build tool:** Gradle
 - **Framework:** Spring Boot
-- **Default server port:** `5001`
 - **Database support:** MySQL (active), H2 (commented configuration available)
 
 ---
